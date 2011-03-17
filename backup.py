@@ -6,6 +6,7 @@ import re
 import datetime
 import subprocess
 
+DEBUG_PRETEND = False
 
 SOURCE_DIR = "/please-prepare-configuration-file"
 TARGET_DIR = SOURCE_DIR
@@ -47,6 +48,8 @@ def slugify(value):
         value = unicode(value)
     value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore')
     value = unicode(_slugify_strip_re.sub('_', value).strip().lower())
+    if value[0] == '_':
+        value = value[1:]
     return value
 #_slugify_hyphenate_re.sub('-', value)
 
@@ -85,13 +88,15 @@ for sub in os.listdir(SOURCE_DIR):
     try:
         if not os.path.exists(tgtdir):
             os.makedirs(tgtdir, 0700)
-        #result_output += "{0}\n".format(cmd + cmd_args)
-        tar = subprocess.Popen(cmd + cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        tar_out = tar.communicate()
-        if tar.returncode != 0:
-            result_output += "----------------------\nBackup of {0} failed:\n".format(srcdir)
-            result_output += str(tar_out[1])
-            result_output += "\n----------------------\n"
+        if DEBUG_PRETEND:
+            result_output += "{0}\n".format(cmd + cmd_args)
+        else:
+            tar = subprocess.Popen(cmd + cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            tar_out = tar.communicate()
+            if tar.returncode != 0:
+                result_output += "----------------------\nBackup of {0} failed:\n".format(srcdir)
+                result_output += str(tar_out[1])
+                result_output += "\n----------------------\n"
     except OSError, e:
         result_output += "----------------------\nBackup of {0} failed:\n".format(srcdir)
         result_output += "Error #" + str(e.errno) + ": " + e.strerror
