@@ -16,6 +16,7 @@ cfg = ConfigParser.RawConfigParser()
 cfg.read('backup.cfg')
 SOURCE_DIR = cfg.get('main', 'source_dir')
 TARGET_DIR = cfg.get('main', 'target_dir')
+EXCLUDE_FILE = cfg.get('main', 'exclude')
 
 skip_list = []
 try:

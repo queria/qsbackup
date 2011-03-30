@@ -1,6 +1,7 @@
 [main]
 source_dir = /tmp/source
 target_dir = /tmp/target
+exclude = ./backup.exclude
 #source_dir = "/home/www/"
 #target_dir = "/.backup/"
 
