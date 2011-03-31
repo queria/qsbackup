@@ -1,0 +1,6 @@
+---
+backup_dir: /.backup/backup/_db/
+user: backup_user
+pass: p4ssw0rd
+skip_info_schema: 1
+
