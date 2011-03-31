@@ -13,7 +13,7 @@ TARGET_DIR = SOURCE_DIR
 EXCLUDE_FILE = './backup.exclude'
 
 cfg = ConfigParser.RawConfigParser()
-cfg.read('backup.cfg')
+cfg.read( os.path.join(os.path.dirname(sys.argv[0]), 'backup.cfg') )
 SOURCE_DIR = cfg.get('main', 'source_dir')
 TARGET_DIR = cfg.get('main', 'target_dir')
 EXCLUDE_FILE = cfg.get('main', 'exclude')
