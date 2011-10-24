@@ -30,7 +30,10 @@ THISMONTH=$(date "+%Y%m")
 LASTMONTH=$(date -d "last month" "+%Y%m")
 
 mv -f "${DBROT}/${THISMONTH}"* -t "${DBLIVE}"
-mv -f "${DBROT}/${LASTMONTH}"* -t "${DBLIVE}"
+if [ ! -z "$KEEPDBTWOMONTHS" ] && $KEEPDBTWOMONTHS;
+then
+	mv -f "${DBROT}/${LASTMONTH}"* -t "${DBLIVE}"
+fi
 
 if [ ! "$(ls -A "${ROTATEPATH}")" ] || [ ! "$(ls -A "${DBROT}")" -a ! "$(ls -A "${FILESROT}")" ];
 then

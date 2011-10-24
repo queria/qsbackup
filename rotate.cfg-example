@@ -1,4 +1,5 @@
 
 LIVEPATH="/.backup/backup"
 ROTATEPATH="/.backup/rotated"
+KEEPDBTWOMONTHS=false
 
