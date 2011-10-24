@@ -1,5 +1,24 @@
 [main]
-source_dir = /your/data_dir
+source_dir = /your/data_dir/*:/your/solo_dir
 target_dir = /.backup/backup/files
 exclude = /.backup/qsbackup/backup.exclude
+
+# source dir can containt multiple colon-separated paths
+# for basic path in source_dir there will be created single backup
+# for paths ending with /* there will be created backup for each child directory/file
+
+# simple example:
+## source_dir = /something
+##    => /backup/something/something-$datetime.tar.gz
+
+# advanced example:
+## source_dir = /something/*:/other/:/home/rest/*
+##    if there is childA, childB, childC in something and sub1, sub2 in rest:
+##    => /backup/something_childA/something_childA-$datetime.tar.gz
+##    => /backup/something_childB/something_childB-$datetime.tar.gz
+##    => /backup/something_childC/something_childC-$datetime.tar.gz
+##    => /backup/other/other-$datetime.tar.gz
+##    => /backup/rest_sub1/rest_sub1-$datetime.tar.gz
+##    => /backup/rest_sub2/rest_sub2-$datetime.tar.gz
+
 

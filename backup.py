@@ -28,6 +28,15 @@ try:
 except IOError, e:
     skip_list = []
 
+cmd = ['tar',
+        '--create',
+        '--gzip',
+        '--preserve-permission',
+        '--one-file-system',
+        ]
+if skip_list:
+    cmd += ['--exclude-from', EXCLUDE_FILE]
+
 def warning(message):
     print(message)
 
@@ -55,61 +64,60 @@ def slugify(value):
 #_slugify_hyphenate_re.sub('-', value)
 
 
-result_output = ''
-to_backup = []
-failed_paths = []
+def backup_dir(source_path, target_dir, target_name):
+    output = ''
 
-cmd = ['tar',
-        '--create',
-        '--gzip',
-        '--preserve-permission',
-        '--one-file-system',
-        ]
-if skip_list:
-    cmd += ['--exclude-from', EXCLUDE_FILE]
+    target_path = os.path.join(target_dir, target_name)
 
-
-for sub in os.listdir(SOURCE_DIR):
-    #if not os.path.isdir(SOURCE_DIR + sub):
-    #   not_dirs.append(SOURCE_DIR + sub)
-    #else:
-    srcdir = os.path.join(SOURCE_DIR, sub)
-    stgt = slugify(srcdir)
-    tgtdir = os.path.join(TARGET_DIR, stgt)
-
-    if srcdir in skip_list:
-        continue
-
-    cmd_args = ['-g', os.path.join(tgtdir, '_status'),
+    cmd_args = ['-g', os.path.join(target_path, '_status'),
         '--file={0}-{1}.tar.gz'.format(
-            os.path.join(tgtdir, stgt),
+            os.path.join(target_path, target_name),
             datetime.datetime.now().strftime('%Y_%m_%d-%H_%M_%S_%f')),
-        srcdir]
+        source_path]
 
     try:
-        if not os.path.exists(tgtdir):
-            os.makedirs(tgtdir, 0700)
+        if not os.path.exists(target_path):
+            os.makedirs(target_path, 0700)
         if DEBUG_PRETEND:
-            result_output += "{0}\n".format(cmd + cmd_args)
+            output += "{0}\n".format(cmd + cmd_args)
         else:
             tar = subprocess.Popen(cmd + cmd_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             tar_out = tar.communicate()
             if tar.returncode != 0:
-                result_output += "----------------------\nBackup of {0} failed:\n".format(srcdir)
-                result_output += str(tar_out[1])
-                result_output += "\n----------------------\n"
+                output += "----------------------\nBackup of {0} failed:\n".format(source_path)
+                output += str(tar_out[1])
+                output += "\n----------------------\n"
     except OSError, e:
-        result_output += "----------------------\nBackup of {0} failed:\n".format(srcdir)
-        result_output += "Error #" + str(e.errno) + ": " + e.strerror
-        result_output += "\n----------------------\n"
+        output += "----------------------\nBackup of {0} failed:\n".format(source_path)
+        output += "Error #" + str(e.errno) + ": " + e.strerror
+        output += "\n----------------------\n"
         pass
+    return output
 
+def do_backup(source_directories, target_dir):
+    output = ''
+    for source_dir in source_directories:
+        if source_dir.endswith('/*'):
+            source_dir = source_dir[:-2]
+            subdirs = os.listdir(source_dir)
+        else:
+            subdirs = [source_dir,]
 
-if failed_paths:
-    warning("Nasledujici cesty se nepovedlo zalohovat: {0}".format(failed_paths))
+        for sub in subdirs:
+            source_path = os.path.join(source_dir, sub)
+            target_name = slugify(source_path)
 
-#print skip_list
-if result_output:
+            if source_path in skip_list:
+                continue
+
+            output += backup_dir(source_path, target_dir, target_name)
+
+    return output
+
+output = do_backup(
+        SOURCE_DIR.split(':'),
+        TARGET_DIR)
+if output:
     print("_...----=======[ QSBackup starting ]=======----..._")
-    print(result_output)
+    print(output)
 
