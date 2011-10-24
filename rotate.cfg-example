@@ -1,0 +1,4 @@
+
+LIVEPATH="/.backup/backup"
+ROTATEPATH="/.backup/rotated"
+

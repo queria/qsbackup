@@ -1,3 +1,5 @@
 backup.exclude
 backup.cfg
 backup-db.cfg
+rotate.cfg
+
