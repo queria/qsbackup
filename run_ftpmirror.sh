@@ -9,9 +9,10 @@ fi
 OUT=$(mktemp "/tmp/runftpmirror.XXXXXXX");
 
 ftpmirror "$1" > $OUT 2>&1
-if grep "\(: \(failure\|error\|\)\| not defined\)" $OUT > /dev/null;
+if grep "\(: \(failure\|error\)\| not defined\)" $OUT > /dev/null;
 then
-	cat $OUT
+	echo "===== Errors found in ftpmirror results: ====="
+	cat $OUT | sed 's/^\(.*\(: \(failure\|error\)\| not defined\).*\)$/\1 ****************************************/'
 	rm $OUT
 	exit 2
 fi
