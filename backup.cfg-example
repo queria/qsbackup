@@ -1,7 +1,5 @@
 [main]
-source_dir = /tmp/source
-target_dir = /tmp/target
-exclude = ./backup.exclude
-#source_dir = "/home/www/"
-#target_dir = "/.backup/"
+source_dir = /your/data_dir
+target_dir = /.backup/backup/files
+exclude = /.backup/qsbackup/backup.exclude
 

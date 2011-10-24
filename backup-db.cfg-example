@@ -1,5 +1,5 @@
 ---
-backup_dir: /.backup/backup/_db/
+backup_dir: /.backup/backup/db/
 user: backup_user
 pass: p4ssw0rd
 skip_info_schema: 1
