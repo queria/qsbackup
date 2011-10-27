@@ -1,0 +1,23 @@
+WARNING:
+	This is extremely hot branch! ;D
+
+	Source codes you got hand on are not supposed to work or to be usefull at all.
+
+	// tech:
+	All in this branch is meant as temporary place where all scripts
+	will be slowly ported to ruby implementation and after that
+	all will be integrated into one all-mighty tool.
+
+	// bfu:
+	So quickly go away if you are not willing to help with rewriting
+	bash/python/perl into pretty (at least at the end ;] ) ruby code.
+	
+	// jokers:
+	Otherwise anything in this repo-branch can destroy any or all of
+	your data and dissolve your grandma as side-effect.
+
+
+Sincerely or smth like that
+	Q.S.
+
+
