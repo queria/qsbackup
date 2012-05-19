@@ -25,7 +25,6 @@ end
 
 def dump_db(dbcfg, dbname, backup_dir)
 	db_path = backup_dir + (dbname + '.sql.bz2')
-	puts "storing #{db_path}"
 	`mysqldump --quick --disable-keys -u #{dbcfg['user']} -p#{dbcfg['pass']} #{dbname} | bzip2 -c > #{db_path.to_s}`
 end
 
@@ -57,11 +56,22 @@ unless backup_dir.directory?
 	exit 2
 end
 
+success = true
+output = []
 dbs.each do |db|
-	dump_db(db_config, db, backup_dir)
+	dump_message = dump_db(db_config, db, backup_dir)
+	if $?.exitstatus
+		output << "Backup of #{db} created successfully"
+	else
+		success = false
+		output << "Backup of #{db} failed!"
+		output << dump_message
+	end
 end
 
-puts 'done'
+unless success
+	puts output.join "\n"
+end
 
 exit 0
 
