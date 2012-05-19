@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.6
+#!/usr/bin/env python2
 import ConfigParser
 import os
 import sys
@@ -101,10 +101,12 @@ def do_backup(source_directories, target_dir):
             source_dir = source_dir[:-2]
             subdirs = os.listdir(source_dir)
         else:
-            subdirs = [source_dir,]
+            subdirs = ['',]
 
         for sub in subdirs:
             source_path = os.path.join(source_dir, sub)
+            if not source_path:
+                continue
             target_name = slugify(source_path)
 
             if source_path in skip_list:
