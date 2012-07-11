@@ -28,8 +28,25 @@ def dump_db(dbcfg, dbname, backup_dir)
 	`mysqldump --quick --disable-keys -u #{dbcfg['user']} -p#{dbcfg['pass']} #{dbname} | bzip2 -c > #{db_path.to_s}`
 end
 
+begin
+  require_relative 'lib/commons.rb'
+rescue NoMethodError
+  require 'lib/commons'
+end
+
+args = Args.new(
+  [:string, 'Path to configuration file', :config, :c],
+  [:bool, 'Display this help information', :help, :h]
+)
+args.process(ARGV)
+
+if args.has? :help
+  puts args.to_s
+  exit 0
+end
+
 config_path = './backup-db.cfg'
-config_path = ARGV[0] unless ARGV[0].nil?
+config_path = args.get(:config, config_path)
 config = YAML::load_file(config_path)
 config['skip_dbs'] ||= ''
 
