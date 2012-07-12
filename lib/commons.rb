@@ -8,4 +8,7 @@ def require_r(file)
 end
 
 require_r 'args'
+require_r 'configfile'
+require_r 'backupdir'
+require_r 'dbbackup'
 

@@ -76,6 +76,8 @@ class Args
         out_opt += " <value>"
       end
 
+      out_opt += "\t" + opt[:description]
+
       out << out_opt
     end
     return out.join("\n")
@@ -119,7 +121,7 @@ class Args
       desc = option.shift
       name = option.shift.to_s
 
-      @options[ name ] = { :present => false, :value => nil, :type => type, :aliases => [] }
+      @options[ name ] = { :description => desc, :type => type, :present => false, :value => nil, :aliases => [] }
 
       option.each { |opt_alias|
         @options_aliases[ opt_alias.to_s ] = name

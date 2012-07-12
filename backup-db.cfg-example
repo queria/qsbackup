@@ -1,6 +1,11 @@
 ---
-backup_dir: /.backup/backup/db/
-user: backup_user
-pass: p4ssw0rd
-skip_info_schema: 1
-
+backup_dir:
+    db: /backup/db/
+db:
+    user: root_or_backup_user
+    pass: p4ssw0rd
+skip_dbs:
+    - mysql
+    - information_schema
+    - performance_schema
+...
